@@ -223,7 +223,7 @@
             <div class="card-body">
               <div class="row align-items-center">
                 <div class="col-md-6">
-                  <span class="balance-label">TOTAL MONTHLY SUBSCRIPTIONS</span>
+                  <span class="balance-label">TOTAL MONTHLY EXPENSES</span>
                   <div class="balance-amount">$<span id="monthlyPriceDisplay">0.00</span></div>
                   <button class="btn btn-light mt-3">
                     <i class="bi bi-arrow-right-circle me-2"></i>View Details
@@ -249,13 +249,13 @@
           <div class="card fade-in">
             <div class="card-body">
               <div class="section-header">
-                <h2 class="h5 mb-0">Recent Subscriptions</h2>
+                <h2 class="h5 mb-0">Recent Purchases</h2>
                 <a href="#" class="view-more">
                   View More <i class="bi bi-arrow-right"></i>
                 </a>
               </div>
               <div class="table-responsive">
-                <table id="subscriptionTable" class="table">
+                <table id="purchaseTable" class="table">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -276,16 +276,31 @@
 
         <!-- Right Column -->
         <div class="col-lg-4">
-          <!-- Add Subscription Card -->
+          <!-- Add Purchase Card -->
           <div class="card mb-4 fade-in">
             <div class="card-body">
-              <h2 class="h5 mb-4">Add New Subscription</h2>
-              <form id="subForm" onsubmit="event.preventDefault(); addSubscription();">
+              <h2 class="h5 mb-4">Add New Purchase</h2>
+              <form id="subForm" onsubmit="event.preventDefault(); addPurchase();">
                 <div class="mb-3">
-                  <label for="subname" class="form-label">Subscription Name</label>
+                  <label for="subname" class="form-label">Purchase Name</label>
                   <input type="text" id="subname" name="subname" class="form-control" placeholder="e.g., Netflix">
                 </div>
                 <div class="mb-3">
+                  <label class="form-label">Purchase Type</label>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="purchaseType" id="oneTime" value="oneTime" checked>
+                    <label class="form-check-label" for="oneTime">
+                      One-time Purchase
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="purchaseType" id="recurring" value="recurring">
+                    <label class="form-check-label" for="recurring">
+                      Recurring Purchase
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3 recurring-options" style="display: none;">
                   <label for="subrate" class="form-label">Billing Cycle</label>
                   <select id="subrate" name="subrate" class="form-select">
                     <option value="weekly">Weekly</option>
@@ -301,7 +316,7 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <label for="subdate" class="form-label">Start Date</label>
+                  <label for="subdate" class="form-label">Date</label>
                   <input type="date" id="subdate" name="subdate" class="form-control">
                 </div>
                 <div class="mb-4">
@@ -314,7 +329,7 @@
                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">
-                  <i class="bi bi-plus-circle me-2"></i>Add Subscription
+                  <i class="bi bi-plus-circle me-2"></i>Add Purchase
                 </button>
               </form>
             </div>
@@ -343,42 +358,31 @@
     <script>
       var cost_list = [];
       var frequency_list = [];
+      var purchase_type_list = [];
 
       // Demo data function
       function populateDemoData() {
-        const subscriptionOptions = {
+        const purchaseOptions = {
           entertainment: [
-            { name: "Netflix", price: 15.99 },
-            { name: "Spotify", price: 9.99 },
-            { name: "Disney+", price: 7.99 },
-            { name: "HBO Max", price: 15.99 },
-            { name: "YouTube Premium", price: 13.99 },
-            { name: "Hulu", price: 7.99 },
-            { name: "Apple TV+", price: 9.99 }
+            { name: "Netflix", price: 15.99, type: "recurring", rate: "monthly" },
+            { name: "Spotify", price: 9.99, type: "recurring", rate: "monthly" },
+            { name: "Movie Tickets", price: 25.00, type: "oneTime" },
+            { name: "Concert", price: 150.00, type: "oneTime" }
           ],
           health: [
-            { name: "Planet Fitness", price: 24.99 },
-            { name: "LA Fitness", price: 39.99 },
-            { name: "Calm App", price: 14.99 },
-            { name: "MyFitnessPal", price: 9.99 },
-            { name: "Headspace", price: 12.99 },
-            { name: "ClassPass", price: 49.99 }
+            { name: "Planet Fitness", price: 24.99, type: "recurring", rate: "monthly" },
+            { name: "Gym Equipment", price: 299.99, type: "oneTime" },
+            { name: "Vitamins", price: 29.99, type: "recurring", rate: "monthly" }
           ],
           productivity: [
-            { name: "Microsoft 365", price: 69.99 },
-            { name: "Adobe Creative Cloud", price: 54.99 },
-            { name: "Notion Pro", price: 8.99 },
-            { name: "Evernote Premium", price: 7.99 },
-            { name: "Grammarly", price: 12.99 },
-            { name: "LastPass", price: 3.99 }
+            { name: "Microsoft 365", price: 69.99, type: "recurring", rate: "yearly" },
+            { name: "Notebook", price: 12.99, type: "oneTime" },
+            { name: "Desk Chair", price: 199.99, type: "oneTime" }
           ],
           other: [
-            { name: "Amazon Prime", price: 139.00 },
-            { name: "iCloud Storage", price: 2.99 },
-            { name: "Google Drive", price: 1.99 },
-            { name: "HelloFresh", price: 129.99 },
-            { name: "Blue Apron", price: 119.99 },
-            { name: "Dropbox Plus", price: 11.99 }
+            { name: "Amazon Prime", price: 139.00, type: "recurring", rate: "yearly" },
+            { name: "Groceries", price: 150.00, type: "recurring", rate: "weekly" },
+            { name: "Birthday Gift", price: 50.00, type: "oneTime" }
           ]
         };
 
@@ -390,12 +394,11 @@
 
         // Get 1-2 items from each category
         const demoData = [];
-        Object.entries(subscriptionOptions).forEach(([category, items]) => {
+        Object.entries(purchaseOptions).forEach(([category, items]) => {
           const count = Math.floor(Math.random() * 2) + 1; // 1 or 2 items
           const selectedItems = getRandomItems(items, count);
           
           selectedItems.forEach(item => {
-            const rate = Math.random() < 0.7 ? "monthly" : "yearly"; // 70% monthly, 30% yearly
             const today = new Date();
             const randomDays = Math.floor(Math.random() * 60) - 30; // -30 to +30 days from today
             const date = new Date(today.setDate(today.getDate() + randomDays));
@@ -403,10 +406,11 @@
 
             demoData.push({
               name: item.name,
-              rate: rate,
-              price: rate === "yearly" ? item.price * 12 : item.price,
+              type: item.type,
+              rate: item.rate || "oneTime",
+              price: item.price,
               date: formattedDate,
-              type: category
+              category: category
             });
           });
         });
@@ -414,24 +418,43 @@
         // Shuffle the final array for more randomness
         demoData.sort(() => 0.5 - Math.random());
 
-        // Add subscriptions
-        demoData.forEach(sub => {
-          document.getElementById("subname").value = sub.name;
-          document.getElementById("subrate").value = sub.rate;
-          document.getElementById("subprice").value = sub.price;
-          document.getElementById("subdate").value = sub.date;
-          document.getElementById("subtype").value = sub.type;
-          addSubscription();
+        // Add purchases
+        demoData.forEach(purchase => {
+          document.getElementById("subname").value = purchase.name;
+          document.getElementById("subprice").value = purchase.price;
+          document.getElementById("subdate").value = purchase.date;
+          document.getElementById("subtype").value = purchase.category;
+          
+          // Set purchase type
+          if (purchase.type === "recurring") {
+            document.getElementById("recurring").checked = true;
+            document.getElementById("subrate").value = purchase.rate;
+            document.querySelector(".recurring-options").style.display = "block";
+          } else {
+            document.getElementById("oneTime").checked = true;
+            document.querySelector(".recurring-options").style.display = "none";
+          }
+          
+          addPurchase();
         });
       }
 
       // Add event listener for demo button
       document.getElementById("demoButton").addEventListener("click", populateDemoData);
 
-      function addSubscription() {
+      // Add event listeners for purchase type radio buttons
+      document.querySelectorAll('input[name="purchaseType"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          document.querySelector(".recurring-options").style.display = 
+            this.value === "recurring" ? "block" : "none";
+        });
+      });
+
+      function addPurchase() {
         // Get form values
         const name = document.getElementById("subname").value || "n/a";
-        const rate = document.getElementById("subrate").value;
+        const purchaseType = document.querySelector('input[name="purchaseType"]:checked').value;
+        const rate = purchaseType === "recurring" ? document.getElementById("subrate").value : "oneTime";
         const price = parseFloat(document.getElementById("subprice").value) || 0;
         const date = document.getElementById("subdate").value || "n/a";
         const type = document.getElementById("subtype").value;
@@ -439,6 +462,7 @@
         // Update cost and frequency lists
         cost_list.push(price);
         frequency_list.push(rate);
+        purchase_type_list.push(purchaseType);
         updateCategoryTotal(type, price, rate);
 
         // Calculate total, monthly, and weekly prices
@@ -448,22 +472,22 @@
             total_price += cost_list[i] * 52;
           } else if (frequency_list[i] === "monthly") {
             total_price += cost_list[i] * 12;
-          } else {
+          } else if (frequency_list[i] === "yearly") {
+            total_price += cost_list[i];
+          } else { // oneTime purchases
             total_price += cost_list[i];
           }
         }
         const monthly_price = total_price / 12;
         const weekly_price = total_price / 52;
-        const avg_price = total_price/cost_list.length
-        const avg_monthly_price = (total_price/cost_list.length)/12
-        const avg_weekly_price = (total_price/cost_list.length)/52
+
         // Add new row to the table
-        const tableBody = document.getElementById("subscriptionTable").querySelector("tbody");
+        const tableBody = document.getElementById("purchaseTable").querySelector("tbody");
         const newRow = document.createElement("tr");
         newRow.classList.add("new-row");
         newRow.innerHTML = `
           <td>${name}</td>
-          <td>${rate}</td>
+          <td>${purchaseType === "recurring" ? rate : "One-time"}</td>
           <td>$${price.toFixed(2)}</td>
           <td>${date}</td>
           <td>${type}</td>
@@ -472,16 +496,13 @@
 
         // Reset the form
         document.getElementById("subForm").reset();
+        document.getElementById("oneTime").checked = true;
+        document.querySelector(".recurring-options").style.display = "none";
 
         // Update statistics
         document.getElementById("totalPriceDisplay").textContent = `$${total_price.toFixed(2)}`;
         document.getElementById("monthlyPriceDisplay").textContent = `$${monthly_price.toFixed(2)}`;
         document.getElementById("weeklyPriceDisplay").textContent = `$${weekly_price.toFixed(2)}`;
-
-        // Update average icons
-        document.getElementById("avgYearlyIcon").textContent = `$${avg_price.toFixed(2)}`;
-        document.getElementById("avgMonthlyIcon").textContent = `$${avg_monthly_price.toFixed(2)}`;
-        document.getElementById("avgWeeklyIcon").textContent = `$${avg_weekly_price.toFixed(2)}`;
 
         // Add animation to statistics
         document.getElementById("totalPriceDisplay").classList.add("updated");

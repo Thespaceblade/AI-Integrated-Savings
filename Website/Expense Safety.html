@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SubCheckr - Expense Safety</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Homepage_s.css">
+    <link rel="icon" type="image/png" href="images/image.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div id="navbar-placeholder"></div>
+    <script>
+      fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+    </script>
+
+    <div class="container mt-5">
+      <h1 class="text-center mb-4">Expense Management Tips</h1>
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="text-primary">Budget Allocation</h2>
+              <p>When managing your expenses, allocate 50% for needs, 30% for wants, and 20% for debts/savings. Needs include groceries, transportation, utilities, rent/mortgage, and insurance. Ensure your expenses align with these categories.</p>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="text-primary">Unnecessary Expenses</h2>
+              <p>Review and eliminate expenses you no longer need. For example, if you're not using a service or membership, consider canceling it. Research alternatives to save money, as new options often offer better value.</p>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-body">
+              <h2 class="text-primary">Expense Tracking</h2>
+              <p>Use our website to review your expenses. Sometimes people forget about recurring charges. If your output doesn't align with your statements, there might be something missing. Statements are a good place to check for forgotten expenses. Furthermore, if a category is bigger than expected, that is a good indicator. Productivity is yellow, health is green, and entertainment is blue.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
