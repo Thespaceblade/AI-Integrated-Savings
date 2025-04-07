@@ -57,3 +57,51 @@ Capital-One-CC/
 ## 📄 License
 
 This project is for educational and demonstration purposes. No commercial use is intended unless otherwise stated.
+
+# SubCheckr - Purchase Tracker
+
+A web application for tracking purchases and subscriptions with a Flask backend and Pandas DataFrame integration.
+
+## Features
+
+- Track one-time and recurring purchases
+- View total, monthly, and weekly expenses
+- Categorize purchases
+- Visualize spending by category
+- Demo mode for testing
+
+## Setup
+
+1. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Start the Flask server:
+```bash
+python app.py
+```
+
+3. Open `Index.html` in your web browser
+
+## Architecture
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: Flask with Pandas DataFrame
+- Data Storage: In-memory DataFrame (resets on server restart)
+
+## API Endpoints
+
+- `GET /api/purchases`: Get all purchases
+- `POST /api/purchases`: Add a new purchase
+- `GET /api/statistics`: Get spending statistics
+
+## Data Structure
+
+Each purchase contains:
+- name: Purchase name
+- purchase_type: "oneTime" or "recurring"
+- rate: "weekly", "monthly", "yearly", or "oneTime"
+- price: Amount in dollars
+- date: Purchase date
+- category: "entertainment", "health", "productivity", or "other"
