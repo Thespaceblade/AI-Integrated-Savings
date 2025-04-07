@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SubCheckr - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Homepage_s.css">
+    <link rel="icon" type="image/png" href="images/image.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+      .stat-box {
+        width: 200px;
+        height: 200px;
+        border-radius: 25px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        transform: scale(0.95);
+        animation: fadeInScale 0.5s forwards;
+      }
+
+      @keyframes fadeInScale {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .stat-box h5 {
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .stat-box p {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* General Styling */
+      body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Form Styling */
+      form input, form select, form button {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      form input:focus, form select:focus {
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        outline: none;
+      }
+
+      form button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Table Styling */
+      .table {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        margin-bottom: 0;
+      }
+
+      .table thead {
+        background-color: var(--capital-one-burgundy);
+      }
+
+      .table thead th {
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+        border: none;
+      }
+
+      .table tbody tr {
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .table tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .table tbody tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .table tbody td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        border: none;
+      }
+
+      /* Statistics Boxes */
+      .stat-box {
+        width: 200px;
+        height: 200px;
+        border-radius: 25px;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .stat-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .stat-box h5 {
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #343a40;
+      }
+
+      .stat-box p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+      }
+
+      /* Button Styling */
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+
+      /* Divider Styling */
+      hr {
+        border: 1px solid #dee2e6;
+        margin: 40px 0;
+      }
+
+      /* Animation for table row addition */
+      @keyframes fadeInRow {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .table tbody tr.new-row {
+        animation: fadeInRow 0.3s ease-out;
+      }
+
+      /* Animation for statistics update */
+      @keyframes highlightStat {
+        from {
+          background-color: #f0f0f0;
+        }
+        to {
+          background-color: #ffffff;
+        }
+      }
+
+      .stat-box p.updated {
+        animation: highlightStat 1s ease-out;
+      }
+
+      #categoryPieChart svg {
+        transition: transform 0.3s ease;
+      }
+
+      #categoryPieChart:hover svg {
+        transform: scale(1.03);
+      }
+
+      #categoryPieChart text {
+        font-family: 'Arial', sans-serif !important;
+        font-size: 14px !important;
+      }
+
+      .google-visualization-tooltip {
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div id="navbar-placeholder"></div>
+    <script>
+      fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+    </script>
+
+    <div class="container-fluid px-4 py-4">
+      <!-- Main Content -->
+      <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+          <!-- Balance Card -->
+          <div class="card primary-card mb-4 fade-in">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <span class="balance-label">TOTAL MONTHLY SUBSCRIPTIONS</span>
+                  <div class="balance-amount">$<span id="monthlyPriceDisplay">0.00</span></div>
+                  <button class="btn btn-light mt-3">
+                    <i class="bi bi-arrow-right-circle me-2"></i>View Details
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-6">
+                      <span class="balance-label">YEARLY TOTAL</span>
+                      <div class="h4 text-white mb-3">$<span id="totalPriceDisplay">0.00</span></div>
+                    </div>
+                    <div class="col-6">
+                      <span class="balance-label">WEEKLY AVG</span>
+                      <div class="h4 text-white">$<span id="weeklyPriceDisplay">0.00</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="card fade-in">
+            <div class="card-body">
+              <div class="section-header">
+                <h2 class="h5 mb-0">Recent Subscriptions</h2>
+                <a href="#" class="view-more">
+                  View More <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+              <div class="table-responsive">
+                <table id="subscriptionTable" class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Cycle</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                      <th>Category</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Rows will be added here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+          <!-- Add Subscription Card -->
+          <div class="card mb-4 fade-in">
+            <div class="card-body">
+              <h2 class="h5 mb-4">Add New Subscription</h2>
+              <form id="subForm" onsubmit="event.preventDefault(); addSubscription();">
+                <div class="mb-3">
+                  <label for="subname" class="form-label">Subscription Name</label>
+                  <input type="text" id="subname" name="subname" class="form-control" placeholder="e.g., Netflix">
+                </div>
+                <div class="mb-3">
+                  <label for="subrate" class="form-label">Billing Cycle</label>
+                  <select id="subrate" name="subrate" class="form-select">
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="subprice" class="form-label">Amount</label>
+                  <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" id="subprice" name="subprice" class="form-control" min="0" step="0.01" placeholder="0.00">
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="subdate" class="form-label">Start Date</label>
+                  <input type="date" id="subdate" name="subdate" class="form-control">
+                </div>
+                <div class="mb-4">
+                  <label for="subtype" class="form-label">Category</label>
+                  <select id="subtype" name="subtype" class="form-select">
+                    <option value="entertainment">Entertainment</option>
+                    <option value="health">Health</option>
+                    <option value="productivity">Productivity</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="bi bi-plus-circle me-2"></i>Add Subscription
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Spending by Category -->
+          <div class="card fade-in">
+            <div class="card-body">
+              <div class="section-header">
+                <h2 class="h5 mb-0">Spending by Category</h2>
+              </div>
+              <div id="categoryPieChart" style="width: 100%; height: 300px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo Button -->
+    <button id="demoButton" class="btn btn-primary">
+      <i class="bi bi-play-circle me-2"></i>Demo
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+      var cost_list = [];
+      var frequency_list = [];
+
+      // Demo data function
+      function populateDemoData() {
+        const subscriptionOptions = {
+          entertainment: [
+            { name: "Netflix", price: 15.99 },
+            { name: "Spotify", price: 9.99 },
+            { name: "Disney+", price: 7.99 },
+            { name: "HBO Max", price: 15.99 },
+            { name: "YouTube Premium", price: 13.99 },
+            { name: "Hulu", price: 7.99 },
+            { name: "Apple TV+", price: 9.99 }
+          ],
+          health: [
+            { name: "Planet Fitness", price: 24.99 },
+            { name: "LA Fitness", price: 39.99 },
+            { name: "Calm App", price: 14.99 },
+            { name: "MyFitnessPal", price: 9.99 },
+            { name: "Headspace", price: 12.99 },
+            { name: "ClassPass", price: 49.99 }
+          ],
+          productivity: [
+            { name: "Microsoft 365", price: 69.99 },
+            { name: "Adobe Creative Cloud", price: 54.99 },
+            { name: "Notion Pro", price: 8.99 },
+            { name: "Evernote Premium", price: 7.99 },
+            { name: "Grammarly", price: 12.99 },
+            { name: "LastPass", price: 3.99 }
+          ],
+          other: [
+            { name: "Amazon Prime", price: 139.00 },
+            { name: "iCloud Storage", price: 2.99 },
+            { name: "Google Drive", price: 1.99 },
+            { name: "HelloFresh", price: 129.99 },
+            { name: "Blue Apron", price: 119.99 },
+            { name: "Dropbox Plus", price: 11.99 }
+          ]
+        };
+
+        // Helper function to get random items from an array
+        function getRandomItems(arr, count) {
+          const shuffled = [...arr].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+        }
+
+        // Get 1-2 items from each category
+        const demoData = [];
+        Object.entries(subscriptionOptions).forEach(([category, items]) => {
+          const count = Math.floor(Math.random() * 2) + 1; // 1 or 2 items
+          const selectedItems = getRandomItems(items, count);
+          
+          selectedItems.forEach(item => {
+            const rate = Math.random() < 0.7 ? "monthly" : "yearly"; // 70% monthly, 30% yearly
+            const today = new Date();
+            const randomDays = Math.floor(Math.random() * 60) - 30; // -30 to +30 days from today
+            const date = new Date(today.setDate(today.getDate() + randomDays));
+            const formattedDate = date.toISOString().split('T')[0];
+
+            demoData.push({
+              name: item.name,
+              rate: rate,
+              price: rate === "yearly" ? item.price * 12 : item.price,
+              date: formattedDate,
+              type: category
+            });
+          });
+        });
+
+        // Shuffle the final array for more randomness
+        demoData.sort(() => 0.5 - Math.random());
+
+        // Add subscriptions
+        demoData.forEach(sub => {
+          document.getElementById("subname").value = sub.name;
+          document.getElementById("subrate").value = sub.rate;
+          document.getElementById("subprice").value = sub.price;
+          document.getElementById("subdate").value = sub.date;
+          document.getElementById("subtype").value = sub.type;
+          addSubscription();
+        });
+      }
+
+      // Add event listener for demo button
+      document.getElementById("demoButton").addEventListener("click", populateDemoData);
+
+      function addSubscription() {
+        // Get form values
+        const name = document.getElementById("subname").value || "n/a";
+        const rate = document.getElementById("subrate").value;
+        const price = parseFloat(document.getElementById("subprice").value) || 0;
+        const date = document.getElementById("subdate").value || "n/a";
+        const type = document.getElementById("subtype").value;
+
+        // Update cost and frequency lists
+        cost_list.push(price);
+        frequency_list.push(rate);
+        updateCategoryTotal(type, price, rate);
+
+        // Calculate total, monthly, and weekly prices
+        let total_price = 0;
+        for (let i = 0; i < cost_list.length; i++) {
+          if (frequency_list[i] === "weekly") {
+            total_price += cost_list[i] * 52;
+          } else if (frequency_list[i] === "monthly") {
+            total_price += cost_list[i] * 12;
+          } else {
+            total_price += cost_list[i];
+          }
+        }
+        const monthly_price = total_price / 12;
+        const weekly_price = total_price / 52;
+        const avg_price = total_price/cost_list.length
+        const avg_monthly_price = (total_price/cost_list.length)/12
+        const avg_weekly_price = (total_price/cost_list.length)/52
+        // Add new row to the table
+        const tableBody = document.getElementById("subscriptionTable").querySelector("tbody");
+        const newRow = document.createElement("tr");
+        newRow.classList.add("new-row");
+        newRow.innerHTML = `
+          <td>${name}</td>
+          <td>${rate}</td>
+          <td>$${price.toFixed(2)}</td>
+          <td>${date}</td>
+          <td>${type}</td>
+        `;
+        tableBody.insertBefore(newRow, tableBody.firstChild);
+
+        // Reset the form
+        document.getElementById("subForm").reset();
+
+        // Update statistics
+        document.getElementById("totalPriceDisplay").textContent = `$${total_price.toFixed(2)}`;
+        document.getElementById("monthlyPriceDisplay").textContent = `$${monthly_price.toFixed(2)}`;
+        document.getElementById("weeklyPriceDisplay").textContent = `$${weekly_price.toFixed(2)}`;
+
+        // Update average icons
+        document.getElementById("avgYearlyIcon").textContent = `$${avg_price.toFixed(2)}`;
+        document.getElementById("avgMonthlyIcon").textContent = `$${avg_monthly_price.toFixed(2)}`;
+        document.getElementById("avgWeeklyIcon").textContent = `$${avg_weekly_price.toFixed(2)}`;
+
+        // Add animation to statistics
+        document.getElementById("totalPriceDisplay").classList.add("updated");
+        document.getElementById("monthlyPriceDisplay").classList.add("updated");
+        document.getElementById("weeklyPriceDisplay").classList.add("updated");
+
+        setTimeout(() => {
+          document.getElementById("totalPriceDisplay").classList.remove("updated");
+          document.getElementById("monthlyPriceDisplay").classList.remove("updated");
+          document.getElementById("weeklyPriceDisplay").classList.remove("updated");
+        }, 1000);
+      }
+
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawCategoryChart);
+
+      let categoryTotals = {
+        entertainment: 0,
+        health: 0,
+        productivity: 0,
+        other: 0
+      };
+
+      function drawCategoryChart() {
+        const data = google.visualization.arrayToDataTable([
+          ['Category', 'Annual Spending'],
+          ['Entertainment', categoryTotals.entertainment],
+          ['Health', categoryTotals.health],
+          ['Productivity', categoryTotals.productivity],
+          ['Other', categoryTotals.other]
+        ]);
+
+        const options = {
+          pieHole: 0.4,
+          colors: ['#007bff', '#28a745', '#ffc107', '#6c757d'],
+          pieSliceTextStyle: {
+            color: '#fff'
+          },
+          chartArea: {
+            width: '90%',
+            height: '80%'
+          },
+          legend: {
+            position: 'bottom',
+            textStyle: {fontSize: 14}
+          }
+        };
+
+        const chart = new google.visualization.PieChart(document.getElementById('categoryPieChart'));
+        chart.draw(data, options);
+      }
+
+      function updateCategoryTotal(type, price, rate) {
+        let annualCost = price;
+        if (rate === 'weekly') annualCost *= 52;
+        else if (rate === 'monthly') annualCost *= 12;
+        categoryTotals[type] += annualCost;
+        drawCategoryChart();
+      }
+    </script>
+  </body>
+</html>

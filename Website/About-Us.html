@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SubCheckr - About Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="Homepage_s.css">
+    <link rel="icon" type="image/png" href="images/image.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div id="navbar-placeholder"></div>
+    <script>
+      fetch('navbar.html')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+    </script>
+
+    <div class="container-fluid px-4 py-5">
+      <!-- Hero Section -->
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+          <h1 class="display-4 fw-bold mb-4">About Us</h1>
+          <p class="lead mb-5">Empowering users to take control of their expenses with smart tracking and management tools.</p>
+        </div>
+      </div>
+
+      <!-- Team Section -->
+      <div class="row g-3 justify-content-center">
+        <div class="col-11 col-lg-10">
+          <div class="card fade-in">
+            <div class="card-body p-4">
+              <div class="row g-3">
+                <!-- Team Member 1 -->
+                <div class="col-md-4 col-lg-2-4">
+                  <div class="card h-100 border-0">
+                    <div class="card-body text-center p-3">
+                      <div class="mb-3">
+                        <img src="images/Haley.jpeg" alt="Profile Picture" class="rounded-circle profile-img mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                      </div>
+                      <h3 class="h6 mb-2">Haley Shah</h3>
+                      <p class="text-muted small mb-2">Product Manager</p>
+                      <p class="small">Business + Computer Science @ UNC.</p>
+                      <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-github"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="col-md-4 col-lg-2-4">
+                  <div class="card h-100 border-0">
+                    <div class="card-body text-center p-3">
+                      <div class="mb-3">
+                        <img src="images/Jason.jpg" alt="Profile Picture" class="rounded-circle profile-img mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                      </div>
+                      <h3 class="h6 mb-2">Jason Charwin</h3>
+                      <p class="text-muted small mb-2">UX Designer</p>
+                      <p class="small">Data Science @ UNC.</p>
+                      <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-dribbble"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="col-md-4 col-lg-2-4">
+                  <div class="card h-100 border-0">
+                    <div class="card-body text-center p-3">
+                      <div class="mb-3">
+                        <img src="images/Chelsea.jpeg" alt="Profile Picture" class="rounded-circle profile-img mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                      </div>
+                      <h3 class="h6 mb-2">Chelsea Yu</h3>
+                      <p class="text-muted small mb-2">Pitch Manager</p>
+                      <p class="small">Statistics + Business @ UNC.</p>
+                      <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-github"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Centered Row for Bottom Two Members -->
+                <div class="w-100"></div> <!-- Force new row -->
+                <div class="col-md-2"></div> <!-- Spacer -->
+                
+                <!-- Team Member 4 -->
+                <div class="col-md-4 col-lg-2-4">
+                  <div class="card h-100 border-0">
+                    <div class="card-body text-center p-3">
+                      <div class="mb-3">
+                        <img src="images/Akshita.jpeg" alt="Profile Picture" class="rounded-circle profile-img mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                      </div>
+                      <h3 class="h6 mb-2">Akshita Padala</h3>
+                      <p class="text-muted small mb-2">Product Designer</p>
+                      <p class="small">Analyzing subscription trends and insights.</p>
+                      <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-github"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Team Member 5 -->
+                <div class="col-md-4 col-lg-2-4">
+                  <div class="card h-100 border-0">
+                    <div class="card-body text-center p-3">
+                      <div class="mb-3">
+                        <img src="images/Capital_One-Logo.wine.png" alt="Profile Picture" class="rounded-circle profile-img mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                      </div>
+                      <h3 class="h6 mb-2">David Kim</h3>
+                      <p class="text-muted small mb-2">Security Specialist</p>
+                      <p class="small">Ensuring security and privacy standards.</p>
+                      <div class="mt-2">
+                        <a href="#" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-github"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-md-2"></div> <!-- Spacer -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission Section -->
+      <div class="row justify-content-center mt-5">
+        <div class="col-lg-8">
+          <div class="card fade-in">
+            <div class="card-body p-5">
+              <h2 class="h3 mb-4 text-center">Our Mission</h2>
+              <p class="lead text-center mb-4">To simplify subscription management and help users make informed financial decisions.</p>
+              <div class="row g-4 mt-4">
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <i class="bi bi-graph-up display-4 text-primary mb-3"></i>
+                    <h3 class="h5">Track Expenses</h3>
+                    <p class="small text-muted">Monitor all your subscriptions in one place</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+                    <h3 class="h5">Stay Secure</h3>
+                    <p class="small text-muted">Protect your financial information</p>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-center">
+                    <i class="bi bi-lightbulb display-4 text-primary mb-3"></i>
+                    <h3 class="h5">Smart Insights</h3>
+                    <p class="small text-muted">Get personalized recommendations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

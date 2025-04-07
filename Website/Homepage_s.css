@@ -1,0 +1,265 @@
+:root {
+  --capital-one-burgundy: #9D2235;
+  --capital-one-red: #A12830;
+  --capital-one-light-red: #B4323B;
+  --capital-one-blue: #004977;
+  --capital-one-gray: #F7F7F7;
+  --capital-one-dark: #141414;
+  --capital-one-text: #2A2A2A;
+  --capital-one-border: #E6E6E6;
+  --capital-one-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --capital-one-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --capital-one-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: white;
+  color: var(--capital-one-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--capital-one-dark);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--capital-one-text);
+  opacity: 0.9;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid var(--capital-one-border);
+  box-shadow: var(--capital-one-shadow);
+  transition: var(--capital-one-transition);
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--capital-one-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card.primary-card {
+  background-color: var(--capital-one-burgundy);
+  color: white;
+  border: none;
+}
+
+.card.primary-card h2, 
+.card.primary-card h3, 
+.card.primary-card h4 {
+  color: white;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: var(--capital-one-transition);
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary {
+  background-color: var(--capital-one-burgundy);
+  border-color: var(--capital-one-burgundy);
+}
+
+.btn-primary:hover {
+  background-color: var(--capital-one-light-red);
+  border-color: var(--capital-one-light-red);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: white;
+  border: 1px solid var(--capital-one-burgundy);
+  color: var(--capital-one-burgundy);
+}
+
+.btn-secondary:hover {
+  background-color: var(--capital-one-gray);
+  color: var(--capital-one-burgundy);
+}
+
+/* Forms */
+.form-control, .form-select {
+  border-radius: 8px;
+  border: 1px solid var(--capital-one-border);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: var(--capital-one-transition);
+  height: auto;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--capital-one-burgundy);
+  box-shadow: 0 0 0 3px rgba(157, 34, 53, 0.1);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--capital-one-dark);
+}
+
+/* Tables */
+.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background-color: white;
+  color: var(--capital-one-text);
+  font-weight: 600;
+  border-bottom: 2px solid var(--capital-one-border);
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--capital-one-border);
+  color: var(--capital-one-text);
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background-color: var(--capital-one-gray);
+}
+
+/* Balance Display */
+.balance-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.balance-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.view-more {
+  color: var(--capital-one-burgundy);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: var(--capital-one-transition);
+}
+
+.view-more:hover {
+  text-decoration: underline;
+  color: var(--capital-one-light-red);
+}
+
+/* Demo Button */
+#demoButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  box-shadow: var(--capital-one-shadow);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#demoButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--capital-one-shadow-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .balance-amount {
+    font-size: 2rem;
+  }
+  
+  .table thead th,
+  .table tbody td {
+    padding: 0.75rem;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--capital-one-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--capital-one-burgundy);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--capital-one-light-red);
+}

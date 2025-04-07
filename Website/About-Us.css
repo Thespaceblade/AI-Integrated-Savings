@@ -1,0 +1,105 @@
+:root {
+  --capital-one-burgundy: #9D2235;
+  --capital-one-red: #A12830;
+  --capital-one-light-red: #B4323B;
+  --capital-one-blue: #004977;
+  --capital-one-gray: #F7F7F7;
+  --capital-one-dark: #141414;
+  --capital-one-text: #2A2A2A;
+  --capital-one-border: #E6E6E6;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: white;
+  color: var(--capital-one-text);
+  line-height: 1.5;
+}
+
+.navbar {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 1rem 2rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid var(--capital-one-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card.primary-card {
+  background-color: var(--capital-one-burgundy);
+  color: white;
+}
+
+.card.primary-card h2, 
+.card.primary-card h3, 
+.card.primary-card h4 {
+  color: white;
+}
+
+.btn-primary {
+  background-color: var(--capital-one-burgundy);
+  border-color: var(--capital-one-burgundy);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: white;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: var(--capital-one-light-red);
+  border-color: var(--capital-one-light-red);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--capital-one-dark);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--capital-one-text);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--capital-one-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--capital-one-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--capital-one-blue);
+}
