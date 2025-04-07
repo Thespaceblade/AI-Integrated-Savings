@@ -33,6 +33,10 @@ CAPITAL-ONE-CC/
 - ✅ Custom CSS styling for consistent appearance
 - ✅ Modular file structure for easy updates and scalability
 
+## 🚀 Deployment
+
+This project is live on GitHub Pages: [https://thespaceblade.github.io/Capital-One-CC/](https://thespaceblade.github.io/Capital-One-CC/)
+
 ## 🚀 How to Run
 
 1. Clone the repository:
@@ -56,9 +60,6 @@ CAPITAL-ONE-CC/
 - ⬜ Improve accessibility (ARIA roles, alt text)
 - ⬜ Add SEO tags and metadata
 
-## 📸 Preview
-
-![Capital One Logo](./Images/Capital_One-Logo.wine.png)
 
 ## 🤝 License
 
