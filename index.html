@@ -258,7 +258,10 @@
       fetch('navbar.html')
         .then(response => response.text())
         .then(data => {
-          document.getElementById('navbar-placeholder').innerHTML = data;
+          document.getElementById('navbar-placeholder').innerHTML = data.replace(
+            'src="Capital_One-Logo.wine.png"',
+            'src="Capital_One-Logo.wine.png"'
+          );
         });
     </script>
 
@@ -427,7 +430,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/index.min.js"></script>
     <script src="config.js"></script>
     <script>
       // Initialize variables
@@ -435,6 +437,12 @@
       let model;
       let googleChartsLoaded = false;
       let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+      let categoryTotals = {
+        entertainment: 0,
+        health: 0,
+        productivity: 0,
+        other: 0
+      };
 
       // Load Google Charts
       google.charts.load("current", {packages:["corechart"]});
@@ -444,37 +452,39 @@
         initializeApp();
       });
 
-      // Initialize Gemini AI
-      if (typeof GoogleGenerativeAI !== 'undefined') {
-        if (typeof CONFIG !== 'undefined' && CONFIG.GEMINI_API_KEY) {
-          try {
-            genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
-            model = genAI.getGenerativeModel({ model: "gemini-pro" });
-            console.log('Gemini initialized successfully');
-          } catch (error) {
-            console.error('Failed to initialize Gemini:', error);
-            document.getElementById('analysisContent').innerHTML = `
-              <div class="alert alert-warning">
-                Failed to initialize AI analysis. Please check your API key configuration.
-              </div>
-            `;
-          }
-        } else {
-          console.error('Config or API key missing');
+    /* 
+    // Initialize Gemini AI
+    if (typeof GoogleGenerativeAI !== 'undefined') {
+      if (typeof CONFIG !== 'undefined' && CONFIG.GEMINI_API_KEY) {
+        try {
+          genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
+          model = genAI.getGenerativeModel({ model: "gemini-pro" });
+          console.log('Gemini initialized successfully');
+        } catch (error) {
+          console.error('Failed to initialize Gemini:', error);
           document.getElementById('analysisContent').innerHTML = `
             <div class="alert alert-warning">
-              AI analysis requires a valid API key. Please check your configuration.
+              Failed to initialize AI analysis. Please check your API key configuration.
             </div>
           `;
         }
       } else {
-        console.error('GoogleGenerativeAI not loaded');
+        console.error('Config or API key missing');
         document.getElementById('analysisContent').innerHTML = `
           <div class="alert alert-warning">
-            AI analysis library not loaded. Please check your internet connection.
+            AI analysis requires a valid API key. Please check your configuration.
           </div>
         `;
       }
+    } else {
+      console.error('GoogleGenerativeAI not loaded');
+      document.getElementById('analysisContent').innerHTML = `
+        <div class="alert alert-warning">
+          AI analysis library not loaded. Please check your internet connection.
+        </div>
+      `;
+    }
+    */
 
       // Initialize the application
       function initializeApp() {
@@ -501,7 +511,12 @@
         if (demoButton) {
           demoButton.addEventListener("click", () => {
             console.log('Demo button clicked');
-            populateDemoData();
+            try {
+              populateDemoData();
+              console.log('populateDemoData executed successfully');
+            } catch (error) {
+              console.error('Error executing populateDemoData:', error);
+            }
           });
         } else {
           console.error('Demo button not found!');
@@ -510,24 +525,42 @@
         if (analyzeButton) {
           analyzeButton.addEventListener("click", () => {
             console.log('Analyze button clicked');
-            analyzePurchases();
+            try {
+              analyzePurchases();
+              console.log('analyzePurchases executed successfully');
+            } catch (error) {
+              console.error('Error executing analyzePurchases:', error);
+            }
           });
         } else {
           console.error('Analyze button not found!');
         }
 
         if (clearButton) {
-          clearButton.addEventListener("click", clearAllData);
+          clearButton.addEventListener("click", () => {
+            console.log('Clear button clicked');
+            try {
+              clearAllData();
+              console.log('clearAllData executed successfully');
+            } catch (error) {
+              console.error('Error executing clearAllData:', error);
+            }
+          });
         } else {
           console.error('Clear button not found!');
         }
 
+        // Re-initialize app to make sure data is displayed properly
+        initializeApp();
+        
         // Test if buttons are clickable
         console.log('Testing button clickability...');
+        /*
         if (demoButton) {
           demoButton.click();
           console.log('Demo button click simulated');
         }
+        */
 
         document.querySelectorAll('input[name="purchaseType"]').forEach(radio => {
           radio.addEventListener('change', function() {
@@ -537,13 +570,6 @@
         });
       });
 
-      // Global variables
-      let categoryTotals = {
-        entertainment: 0,
-        health: 0,
-        productivity: 0,
-        other: 0
-      };
 
       // Function to save purchases to localStorage
       function savePurchases() {
@@ -868,13 +894,18 @@
         console.log('Demo data generated:', demoData);
 
         // Clear existing purchases and set to demo data
-        purchases = demoData;
+        purchases = purchases.concat(demoData);
         savePurchases();
-        console.log('Purchases saved to localStorage');
-
+        
+        // Force reload from localStorage to ensure data is fresh
+        purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+        
         // Update display
         fetchPurchases();
         updateStatistics();
+        
+        // Optional: User feedback
+        alert("✅ Sample data loaded and displayed!");
         console.log('Display updated');
       }
     </script>

@@ -1,0 +1,83 @@
+:root {
+  --capital-one-burgundy: #9D2235;
+  --capital-one-red: #A12830;
+  --capital-one-light-red: #B4323B;
+  --capital-one-blue: #004977;
+  --capital-one-gray: #F7F7F7;
+  --capital-one-dark: #141414;
+  --capital-one-text: #2A2A2A;
+  --capital-one-border: #E6E6E6;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: white;
+  color: var(--capital-one-text);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--capital-one-dark);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--capital-one-text);
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid var(--capital-one-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.btn-primary {
+  background-color: var(--capital-one-burgundy);
+  border-color: var(--capital-one-burgundy);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--capital-one-light-red);
+  border-color: var(--capital-one-light-red);
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
