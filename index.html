@@ -5,11 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SubCheckr - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Homepage_s.css">
+    <link rel="stylesheet" href="index_s.css">
     <link rel="icon" type="image/png" href="images/image.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
+      :root {
+        --capital-one-burgundy: #8B0000;
+        --capital-one-red: #CC0000;
+      }
+
+      .primary-card {
+        background-color: var(--capital-one-burgundy);
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .balance-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .balance-amount {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
       .stat-box {
         width: 200px;
         height: 200px;
@@ -135,16 +160,28 @@
 
       /* Button Styling */
       .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: var(--capital-one-red);
+        border-color: var(--capital-one-red);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .btn-primary:hover {
         transform: translateY(-3px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background-color: #0056b3;
-        border-color: #0056b3;
+        background-color: var(--capital-one-burgundy);
+        border-color: var(--capital-one-burgundy);
+      }
+
+      .btn-light {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      .btn-light:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: white;
       }
 
       /* Divider Styling */
