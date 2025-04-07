@@ -3,9 +3,19 @@ from flask_cors import CORS
 import pandas as pd
 from datetime import datetime
 import os
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__, static_folder='.')
 CORS(app)
+
+# Configure Gemini API
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel('gemini-pro')
 
 # Initialize DataFrame with columns
 df = pd.DataFrame(columns=[
@@ -43,7 +53,6 @@ def handle_purchases():
         return jsonify({"message": "Purchase added successfully"})
     
     elif request.method == 'GET':
-        # Convert DataFrame to list of dictionaries
         purchases = df.to_dict('records')
         return jsonify(purchases)
 
@@ -84,6 +93,48 @@ def get_statistics():
         'weekly_price': round(weekly_price, 2),
         'category_totals': category_totals
     })
+
+@app.route('/api/analyze', methods=['GET'])
+def analyze_purchases():
+    global df
+    
+    if df.empty:
+        return jsonify({"analysis": "No purchase data available for analysis."})
+    
+    try:
+        # Prepare data for analysis
+        analysis_data = {
+            "total_purchases": len(df),
+            "categories": df['category'].value_counts().to_dict(),
+            "total_annual_spending": df['annual_price'].sum(),
+            "average_purchase": df['price'].mean(),
+            "recurring_vs_one_time": df['purchase_type'].value_counts().to_dict()
+        }
+        
+        # Create prompt for Gemini
+        prompt = f"""
+        Analyze this purchase data and provide insights:
+        {analysis_data}
+        
+        Please provide:
+        1. Overall spending patterns
+        2. Category distribution analysis
+        3. Recommendations for potential savings
+        4. Any interesting trends or observations
+        
+        Keep the response concise and focused on actionable insights.
+        """
+        
+        # Get response from Gemini
+        response = model.generate_content(prompt)
+        
+        return jsonify({
+            "analysis": response.text,
+            "data": analysis_data
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000) 

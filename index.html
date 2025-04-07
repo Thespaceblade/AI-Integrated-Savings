@@ -237,6 +237,18 @@
         border-radius: 8px !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
       }
+
+      .analysis-section {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      
+      .analysis-text {
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
     </style>
   </head>
   <body>
@@ -306,6 +318,24 @@
                     <!-- Rows will be added here -->
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Analysis -->
+          <div class="card fade-in mt-4">
+            <div class="card-body">
+              <div class="section-header">
+                <h2 class="h5 mb-0">AI Insights</h2>
+                <button id="analyzeButton" class="btn btn-sm btn-primary">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Refresh Analysis
+                </button>
+              </div>
+              <div id="analysisContent" class="mt-3">
+                <div class="text-center text-muted">
+                  <i class="bi bi-graph-up-arrow display-4"></i>
+                  <p class="mt-2">Click "Refresh Analysis" to get AI-powered insights about your spending patterns.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -386,17 +416,128 @@
     </div>
 
     <!-- Demo Button -->
-    <button id="demoButton" class="btn btn-primary">
-      <i class="bi bi-play-circle me-2"></i>Load Sample Data
-    </button>
+    <div class="position-fixed bottom-0 end-0 p-3">
+      <button id="demoButton" class="btn btn-primary me-2">
+        <i class="bi bi-play-circle me-2"></i>Load Sample Data
+      </button>
+      <button id="clearButton" class="btn btn-danger">
+        <i class="bi bi-trash me-2"></i>Clear Data
+      </button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/index.min.js"></script>
+    <script src="config.js"></script>
     <script>
+      // Initialize variables
+      let genAI;
+      let model;
+      let googleChartsLoaded = false;
+      let purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+
+      // Load Google Charts
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(() => {
+        googleChartsLoaded = true;
+        console.log('Google Charts loaded');
+        initializeApp();
+      });
+
+      // Initialize Gemini AI
+      if (typeof GoogleGenerativeAI !== 'undefined') {
+        if (typeof CONFIG !== 'undefined' && CONFIG.GEMINI_API_KEY) {
+          try {
+            genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
+            model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            console.log('Gemini initialized successfully');
+          } catch (error) {
+            console.error('Failed to initialize Gemini:', error);
+            document.getElementById('analysisContent').innerHTML = `
+              <div class="alert alert-warning">
+                Failed to initialize AI analysis. Please check your API key configuration.
+              </div>
+            `;
+          }
+        } else {
+          console.error('Config or API key missing');
+          document.getElementById('analysisContent').innerHTML = `
+            <div class="alert alert-warning">
+              AI analysis requires a valid API key. Please check your configuration.
+            </div>
+          `;
+        }
+      } else {
+        console.error('GoogleGenerativeAI not loaded');
+        document.getElementById('analysisContent').innerHTML = `
+          <div class="alert alert-warning">
+            AI analysis library not loaded. Please check your internet connection.
+          </div>
+        `;
+      }
+
+      // Initialize the application
+      function initializeApp() {
+        console.log('Initializing application');
+        fetchPurchases();
+        updateStatistics();
+      }
+
+      // Wait for DOM to be ready
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM Content Loaded');
+        
+        // Add event listeners
+        const demoButton = document.getElementById("demoButton");
+        const analyzeButton = document.getElementById("analyzeButton");
+        const clearButton = document.getElementById("clearButton");
+        
+        console.log('Buttons found:', {
+          demoButton: demoButton,
+          analyzeButton: analyzeButton,
+          clearButton: clearButton
+        });
+        
+        if (demoButton) {
+          demoButton.addEventListener("click", () => {
+            console.log('Demo button clicked');
+            populateDemoData();
+          });
+        } else {
+          console.error('Demo button not found!');
+        }
+        
+        if (analyzeButton) {
+          analyzeButton.addEventListener("click", () => {
+            console.log('Analyze button clicked');
+            analyzePurchases();
+          });
+        } else {
+          console.error('Analyze button not found!');
+        }
+
+        if (clearButton) {
+          clearButton.addEventListener("click", clearAllData);
+        } else {
+          console.error('Clear button not found!');
+        }
+
+        // Test if buttons are clickable
+        console.log('Testing button clickability...');
+        if (demoButton) {
+          demoButton.click();
+          console.log('Demo button click simulated');
+        }
+
+        document.querySelectorAll('input[name="purchaseType"]').forEach(radio => {
+          radio.addEventListener('change', function() {
+            document.querySelector(".recurring-options").style.display = 
+              this.value === "recurring" ? "block" : "none";
+          });
+        });
+      });
+
       // Global variables
-      let cost_list = [];
-      let frequency_list = [];
-      let purchase_type_list = [];
       let categoryTotals = {
         entertainment: 0,
         health: 0,
@@ -404,68 +545,83 @@
         other: 0
       };
 
-      // Function to fetch and display purchases
-      async function fetchPurchases() {
-        try {
-          const response = await fetch('/api/purchases');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const purchases = await response.json();
-          
-          // Clear existing table rows
-          const tableBody = document.getElementById("purchaseTable").querySelector("tbody");
-          tableBody.innerHTML = '';
-          
-          // Add purchases to table
-          purchases.forEach(purchase => {
-            const newRow = document.createElement("tr");
-            newRow.classList.add("new-row");
-            newRow.innerHTML = `
-              <td>${purchase.name}</td>
-              <td>${purchase.purchase_type === "recurring" ? purchase.rate : "One-time"}</td>
-              <td>$${parseFloat(purchase.price).toFixed(2)}</td>
-              <td>${purchase.date}</td>
-              <td>${purchase.category}</td>
-            `;
-            tableBody.insertBefore(newRow, tableBody.firstChild);
-          });
-        } catch (error) {
-          console.error('Error fetching purchases:', error);
-        }
+      // Function to save purchases to localStorage
+      function savePurchases() {
+        localStorage.setItem('purchases', JSON.stringify(purchases));
       }
 
-      // Function to fetch and update statistics
-      async function fetchStatistics() {
-        try {
-          const response = await fetch('/api/statistics');
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const stats = await response.json();
-          
-          // Update display values
-          document.getElementById("totalPriceDisplay").textContent = `$${stats.total_price.toFixed(2)}`;
-          document.getElementById("monthlyPriceDisplay").textContent = `$${stats.monthly_price.toFixed(2)}`;
-          document.getElementById("weeklyPriceDisplay").textContent = `$${stats.weekly_price.toFixed(2)}`;
-          
-          // Update category totals
-          categoryTotals = stats.category_totals;
-          drawCategoryChart();
-          
-          // Add animation to statistics
-          document.getElementById("totalPriceDisplay").classList.add("updated");
-          document.getElementById("monthlyPriceDisplay").classList.add("updated");
-          document.getElementById("weeklyPriceDisplay").classList.add("updated");
-          
-          setTimeout(() => {
-            document.getElementById("totalPriceDisplay").classList.remove("updated");
-            document.getElementById("monthlyPriceDisplay").classList.remove("updated");
-            document.getElementById("weeklyPriceDisplay").classList.remove("updated");
-          }, 1000);
-        } catch (error) {
-          console.error('Error fetching statistics:', error);
-        }
+      // Function to fetch and display purchases
+      function fetchPurchases() {
+        console.log('fetchPurchases called');
+        console.log('Current purchases:', purchases);
+        
+        // Clear existing table rows
+        const tableBody = document.getElementById("purchaseTable").querySelector("tbody");
+        console.log('Table body element:', tableBody);
+        tableBody.innerHTML = '';
+        
+        // Add purchases to table
+        purchases.forEach(purchase => {
+          console.log('Adding purchase to table:', purchase);
+          const newRow = document.createElement("tr");
+          newRow.classList.add("new-row");
+          newRow.innerHTML = `
+            <td>${purchase.name}</td>
+            <td>${purchase.purchase_type === "recurring" ? purchase.rate : "One-time"}</td>
+            <td>$${parseFloat(purchase.price).toFixed(2)}</td>
+            <td>${purchase.date}</td>
+            <td>${purchase.category}</td>
+          `;
+          tableBody.insertBefore(newRow, tableBody.firstChild);
+        });
+      }
+
+      // Function to calculate and update statistics
+      function updateStatistics() {
+        // Calculate total price based on frequency
+        let total_price = 0;
+        purchases.forEach(purchase => {
+          let annual_price = purchase.price;
+          if (purchase.rate === 'weekly') annual_price *= 52;
+          else if (purchase.rate === 'monthly') annual_price *= 12;
+          total_price += annual_price;
+        });
+        
+        const monthly_price = total_price / 12;
+        const weekly_price = total_price / 52;
+        
+        // Update display values
+        document.getElementById("totalPriceDisplay").textContent = `$${total_price.toFixed(2)}`;
+        document.getElementById("monthlyPriceDisplay").textContent = `$${monthly_price.toFixed(2)}`;
+        document.getElementById("weeklyPriceDisplay").textContent = `$${weekly_price.toFixed(2)}`;
+        
+        // Calculate category totals
+        categoryTotals = {
+          entertainment: 0,
+          health: 0,
+          productivity: 0,
+          other: 0
+        };
+        
+        purchases.forEach(purchase => {
+          let annual_price = purchase.price;
+          if (purchase.rate === 'weekly') annual_price *= 52;
+          else if (purchase.rate === 'monthly') annual_price *= 12;
+          categoryTotals[purchase.category] += annual_price;
+        });
+        
+        drawCategoryChart();
+        
+        // Add animation to statistics
+        document.getElementById("totalPriceDisplay").classList.add("updated");
+        document.getElementById("monthlyPriceDisplay").classList.add("updated");
+        document.getElementById("weeklyPriceDisplay").classList.add("updated");
+        
+        setTimeout(() => {
+          document.getElementById("totalPriceDisplay").classList.remove("updated");
+          document.getElementById("monthlyPriceDisplay").classList.remove("updated");
+          document.getElementById("weeklyPriceDisplay").classList.remove("updated");
+        }, 1000);
       }
 
       // Modified addPurchase function
@@ -483,135 +639,124 @@
           return;
         }
 
+        // Add new purchase
+        purchases.push({
+          name,
+          purchase_type: purchaseType,
+          rate,
+          price,
+          date,
+          category: type
+        });
+
+        // Save to localStorage
+        savePurchases();
+
+        // Reset the form
+        document.getElementById("subForm").reset();
+        document.getElementById("oneTime").checked = true;
+        document.querySelector(".recurring-options").style.display = "none";
+        
+        // Update display
+        fetchPurchases();
+        updateStatistics();
+      }
+
+      // Function to analyze purchases using Gemini
+      async function analyzePurchases() {
+        if (purchases.length === 0) {
+          document.getElementById('analysisContent').innerHTML = `
+            <div class="alert alert-info">
+              No purchase data available for analysis.
+            </div>
+          `;
+          return;
+        }
+
         try {
-          // Send purchase data to backend
-          const response = await fetch('/api/purchases', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              name,
-              purchase_type: purchaseType,
-              rate,
-              price,
-              date,
-              category: type
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
-          // Reset the form
-          document.getElementById("subForm").reset();
-          document.getElementById("oneTime").checked = true;
-          document.querySelector(".recurring-options").style.display = "none";
+          console.log('Starting analysis with purchases:', purchases);
           
-          // Refresh purchases and statistics
-          await fetchPurchases();
-          await fetchStatistics();
-        } catch (error) {
-          console.error('Error adding purchase:', error);
-          alert('Failed to add purchase. Please try again.');
-        }
-      }
+          // Prepare data for analysis
+          const analysis_data = {
+            total_purchases: purchases.length,
+            categories: purchases.reduce((acc, purchase) => {
+              acc[purchase.category] = (acc[purchase.category] || 0) + 1;
+              return acc;
+            }, {}),
+            total_annual_spending: purchases.reduce((total, purchase) => {
+              let annual_price = purchase.price;
+              if (purchase.rate === 'weekly') annual_price *= 52;
+              else if (purchase.rate === 'monthly') annual_price *= 12;
+              return total + annual_price;
+            }, 0),
+            average_purchase: purchases.reduce((sum, purchase) => sum + purchase.price, 0) / purchases.length,
+            recurring_vs_one_time: purchases.reduce((acc, purchase) => {
+              acc[purchase.purchase_type] = (acc[purchase.purchase_type] || 0) + 1;
+              return acc;
+            }, {})
+          };
 
-      // Modified demo data function
-      async function populateDemoData() {
-        const purchaseOptions = {
-          entertainment: [
-            { name: "Netflix", price: 15.99, purchase_type: "recurring", rate: "monthly" },
-            { name: "Spotify", price: 9.99, purchase_type: "recurring", rate: "monthly" },
-            { name: "Movie Tickets", price: 25.00, purchase_type: "oneTime", rate: "oneTime" },
-            { name: "Concert", price: 150.00, purchase_type: "oneTime", rate: "oneTime" }
-          ],
-          health: [
-            { name: "Planet Fitness", price: 24.99, purchase_type: "recurring", rate: "monthly" },
-            { name: "Gym Equipment", price: 299.99, purchase_type: "oneTime", rate: "oneTime" },
-            { name: "Vitamins", price: 29.99, purchase_type: "recurring", rate: "monthly" }
-          ],
-          productivity: [
-            { name: "Microsoft 365", price: 69.99, purchase_type: "recurring", rate: "yearly" },
-            { name: "Notebook", price: 12.99, purchase_type: "oneTime", rate: "oneTime" },
-            { name: "Desk Chair", price: 199.99, purchase_type: "oneTime", rate: "oneTime" }
-          ],
-          other: [
-            { name: "Amazon Prime", price: 139.00, purchase_type: "recurring", rate: "yearly" },
-            { name: "Groceries", price: 150.00, purchase_type: "recurring", rate: "weekly" },
-            { name: "Birthday Gift", price: 50.00, purchase_type: "oneTime", rate: "oneTime" }
-          ]
-        };
+          console.log('Analysis data prepared:', analysis_data);
 
-        // Helper function to get random items from an array
-        function getRandomItems(arr, count) {
-          const shuffled = [...arr].sort(() => 0.5 - Math.random());
-          return shuffled.slice(0, count);
-        }
-
-        // Get 1-2 items from each category
-        const demoData = [];
-        Object.entries(purchaseOptions).forEach(([category, items]) => {
-          const count = Math.floor(Math.random() * 2) + 1;
-          const selectedItems = getRandomItems(items, count);
-          
-          selectedItems.forEach(item => {
-            const today = new Date();
-            const randomDays = Math.floor(Math.random() * 60) - 30;
-            const date = new Date(today.setDate(today.getDate() + randomDays));
-            const formattedDate = date.toISOString().split('T')[0];
-
-            demoData.push({
-              name: item.name,
-              purchase_type: item.purchase_type,
-              rate: item.rate,
-              price: item.price,
-              date: formattedDate,
-              category: category
-            });
-          });
-        });
-
-        // Add each demo purchase
-        for (const purchase of demoData) {
-          try {
-            const response = await fetch('/api/purchases', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(purchase)
-            });
+          // Create prompt for Gemini
+          const prompt = `
+            Analyze this purchase data and provide insights:
+            ${JSON.stringify(analysis_data, null, 2)}
             
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-          } catch (error) {
-            console.error('Error adding demo purchase:', error);
-          }
-        }
+            Please provide:
+            1. Overall spending patterns
+            2. Category distribution analysis
+            3. Recommendations for potential savings
+            4. Any interesting trends or observations
+            
+            Keep the response concise and focused on actionable insights.
+          `;
 
-        // Refresh the display
-        await fetchPurchases();
-        await fetchStatistics();
-      }
+          console.log('Sending prompt to Gemini:', prompt);
 
-      // Initialize the page
-      document.addEventListener('DOMContentLoaded', async () => {
-        // Add event listeners
-        document.getElementById("demoButton").addEventListener("click", populateDemoData);
-        document.querySelectorAll('input[name="purchaseType"]').forEach(radio => {
-          radio.addEventListener('change', function() {
-            document.querySelector(".recurring-options").style.display = 
-              this.value === "recurring" ? "block" : "none";
+          // Get response from Gemini
+          const result = await model.generateContent(prompt);
+          const response = await result.response;
+          const text = response.text();
+
+          console.log('Received response from Gemini:', text);
+
+          // Display analysis
+          document.getElementById('analysisContent').innerHTML = `
+            <div class="analysis-section">
+              <h6 class="text-primary mb-3">Spending Analysis</h6>
+              <div class="analysis-text">${text}</div>
+              <div class="mt-4">
+                <h6 class="text-primary mb-3">Key Metrics</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>Total Purchases:</strong> ${analysis_data.total_purchases}</p>
+                    <p><strong>Average Purchase:</strong> $${analysis_data.average_purchase.toFixed(2)}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Total Annual Spending:</strong> $${analysis_data.total_annual_spending.toFixed(2)}</p>
+                    <p><strong>Recurring vs One-time:</strong> ${JSON.stringify(analysis_data.recurring_vs_one_time)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error analyzing purchases:', error);
+          console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
           });
-        });
-
-        // Load initial data
-        await fetchPurchases();
-        await fetchStatistics();
-      });
+          document.getElementById('analysisContent').innerHTML = `
+            <div class="alert alert-danger">
+              Failed to analyze purchases. Error: ${error.message}
+              <br>
+              Please check the console for more details.
+            </div>
+          `;
+        }
+      }
 
       // Keep the existing Google Charts code
       google.charts.load("current", {packages:["corechart"]});
@@ -644,6 +789,93 @@
 
         const chart = new google.visualization.PieChart(document.getElementById('categoryPieChart'));
         chart.draw(data, options);
+      }
+
+      // Function to clear all data
+      function clearAllData() {
+        if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+          purchases = [];
+          savePurchases();
+          fetchPurchases();
+          updateStatistics();
+          document.getElementById('analysisContent').innerHTML = `
+            <div class="text-center text-muted">
+              <i class="bi bi-graph-up-arrow display-4"></i>
+              <p class="mt-2">Click "Refresh Analysis" to get AI-powered insights about your spending patterns.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Function to populate demo data
+      function populateDemoData() {
+        console.log('populateDemoData function called');
+        const purchaseOptions = {
+          entertainment: [
+            { name: "Netflix", price: 15.99, purchase_type: "recurring", rate: "monthly" },
+            { name: "Spotify", price: 9.99, purchase_type: "recurring", rate: "monthly" },
+            { name: "Movie Tickets", price: 25.00, purchase_type: "oneTime", rate: "oneTime" },
+            { name: "Concert", price: 150.00, purchase_type: "oneTime", rate: "oneTime" }
+          ],
+          health: [
+            { name: "Planet Fitness", price: 24.99, purchase_type: "recurring", rate: "monthly" },
+            { name: "Gym Equipment", price: 299.99, purchase_type: "oneTime", rate: "oneTime" },
+            { name: "Vitamins", price: 29.99, purchase_type: "recurring", rate: "monthly" }
+          ],
+          productivity: [
+            { name: "Microsoft 365", price: 69.99, purchase_type: "recurring", rate: "yearly" },
+            { name: "Notebook", price: 12.99, purchase_type: "oneTime", rate: "oneTime" },
+            { name: "Desk Chair", price: 199.99, purchase_type: "oneTime", rate: "oneTime" }
+          ],
+          other: [
+            { name: "Amazon Prime", price: 139.00, purchase_type: "recurring", rate: "yearly" },
+            { name: "Groceries", price: 150.00, purchase_type: "recurring", rate: "weekly" },
+            { name: "Birthday Gift", price: 50.00, purchase_type: "oneTime", rate: "oneTime" }
+          ]
+        };
+
+        console.log('Purchase options loaded');
+
+        // Helper function to get random items from an array
+        function getRandomItems(arr, count) {
+          const shuffled = [...arr].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+        }
+
+        // Get 1-2 items from each category
+        const demoData = [];
+        Object.entries(purchaseOptions).forEach(([category, items]) => {
+          const count = Math.floor(Math.random() * 2) + 1;
+          const selectedItems = getRandomItems(items, count);
+          
+          selectedItems.forEach(item => {
+            const today = new Date();
+            const randomDays = Math.floor(Math.random() * 60) - 30;
+            const date = new Date(today.setDate(today.getDate() + randomDays));
+            const formattedDate = date.toISOString().split('T')[0];
+
+            demoData.push({
+              name: item.name,
+              purchase_type: item.purchase_type,
+              rate: item.rate,
+              price: item.price,
+              date: formattedDate,
+              category: category
+            });
+          });
+        });
+
+        console.log('Demo data generated:', demoData);
+
+        // Clear existing purchases and set to demo data
+        purchases = demoData;
+        savePurchases();
+        console.log('Purchases saved to localStorage');
+
+        // Update display
+        fetchPurchases();
+        updateStatistics();
+        console.log('Display updated');
       }
     </script>
   </body>
