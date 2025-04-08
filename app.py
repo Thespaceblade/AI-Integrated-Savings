@@ -101,6 +101,14 @@ def analyze_purchases():
     if df.empty:
         return jsonify({"analysis": "No purchase data available for analysis."})
     
+    # Ensure 'annual_price' column exists
+    if 'annual_price' not in df.columns:
+        df['annual_price'] = df.apply(lambda row: 
+            row['price'] * 52 if row['rate'] == 'weekly' else
+            row['price'] * 12 if row['rate'] == 'monthly' else
+            row['price'] if row['rate'] == 'yearly' else
+            row['price'], axis=1)
+    
     try:
         # Prepare data for analysis
         analysis_data = {
@@ -113,23 +121,33 @@ def analyze_purchases():
         
         # Create prompt for Gemini
         prompt = f"""
-        Analyze this purchase data and provide insights:
+        You are a personal finance advisor. Review this user's spending data:
+
         {analysis_data}
-        
-        Please provide:
-        1. Overall spending patterns
-        2. Category distribution analysis
-        3. Recommendations for potential savings
-        4. Any interesting trends or observations
-        
-        Keep the response concise and focused on actionable insights.
+
+        Please analyze this and provide:
+        1. Patterns in how they spend (e.g., what categories dominate, how recurring vs one-time costs compare)
+        2. Any unnecessary or high-frequency purchases
+        3. Budgeting advice — how could they reduce costs while maintaining lifestyle?
+        4. Red flags or risks (e.g., too much in entertainment or subscriptions)
+        5. One-sentence takeaway they should remember this month
+
+        Be clear and conversational, not robotic.
         """
         
         # Get response from Gemini
         response = model.generate_content(prompt)
         
+        # Structure response for frontend
+        sections = response.text.split('\n\n')
+        structured_response = {
+            "summary": sections[0] if len(sections) > 0 else "",
+            "advice": [section.strip() for section in sections[1:] if section.strip()],
+            "raw_text": response.text
+        }
+
         return jsonify({
-            "analysis": response.text,
+            "analysis": structured_response,
             "data": analysis_data
         })
         
@@ -137,4 +155,4 @@ def analyze_purchases():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000) 
+    app.run(debug=True, port=5000)
