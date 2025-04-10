@@ -1,8 +1,27 @@
 # AI Integrated Savings
 
-A user-friendly, multi-page informational website designed to showcase AI-driven savings strategies. This frontend concept emphasizes consistent branding, a shared navigation bar, and an intuitive layout. The project demonstrates proficiency in HTML, CSS, and basic frontend architecture.
+This project is a demo frontend for a savings tool built to help users reduce unnecessary expenses and learn more about AI-driven financial insights. It was originally designed as part of a hackathon and continues to be improved as a standalone project. The site contains multiple informational pages that help users learn how AI can be used to evaluate subscriptions, track spending, and recommend savings strategies.
 
-## Project Structure
+The goal was to build a professional, multi-page site that shares a unified brand across all pages using a shared navigation bar and consistent design system. This project showcases skills in frontend development (HTML, CSS, JS) and basic Flask backend setup.
+
+---
+
+## 🌐 Live Demo (Local)
+
+This is a static site with a basic Python server to simulate full app behavior. Clone and run locally using the instructions below.
+
+## 📄 Available Pages
+
+- [Home](index.html)
+- [About Us](About-Us.html)
+- [Expense Safety](Expense-Safety.html)
+- [Subscription Safety](Subscription-Safety.html)
+
+Each page features a consistent layout and branding system via the shared navigation bar.
+
+---
+
+## 🗂️ Project Structure
 
 ```
 AI-Integrated-Savings/
@@ -27,61 +46,57 @@ AI-Integrated-Savings/
 └── requirements.txt
 ```
 
-## Features
+---
 
-- **Informational Pages**: Includes pages such as About Us, Expense Safety, and Subscription Safety to provide comprehensive information on AI-driven savings strategies.
-- **Consistent Navigation**: A shared navigation bar across all pages ensures seamless user experience.
-- **Responsive Design**: The website is designed to be responsive across various devices using CSS.
+## 🛠️ Technologies Used
 
-## Technologies Used
+- **HTML5 & CSS3** – Core structure and responsive design
+- **JavaScript** – Interactive behaviors and dynamic page elements
+- **Python (Flask)** – Simple local server simulation (`app.py`)
+- **VS Code** – Development environment
 
-- **HTML5**: For structuring the web pages.
-- **CSS3**: For styling and layout.
-- **JavaScript**: For interactive elements.
-- **Python**: Backend logic implemented with Flask (`app.py`).
-- **Visual Studio Code**: Project development environment.
+---
 
-## Setup Instructions
+## ⚙️ How to Run Locally
 
 1. **Clone the Repository**:
-
    ```bash
    git clone https://github.com/Thespaceblade/AI-Integrated-Savings.git
    ```
 
 2. **Navigate to the Project Directory**:
-
    ```bash
    cd AI-Integrated-Savings
    ```
 
-3. **Set Up a Virtual Environment** (Optional but recommended):
-
+3. **(Optional) Set up a Virtual Environment**:
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
+   source venv/bin/activate  # On Windows use venv\Scripts\activate
    ```
 
 4. **Install Required Packages**:
-
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **Run the Application**:
-
+5. **Run the App**:
    ```bash
    python app.py
    ```
 
-6. **View in Browser**:
+6. **Visit in Browser**:
+   Open `http://localhost:5000` to view the homepage and explore the rest of the site.
 
-   Open `http://localhost:5000` in your web browser to explore the website.
+---
 
-## Contributing
+## 🤝 Contributions
 
-Contributions are welcome! Please fork the repository and submit a pull request with your enhancements.
+Feel free to fork the repo and submit pull requests with ideas, improvements, or new features.
 
-## License
+---
 
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+## ❗ Notes
+
+- This repo no longer references any branded content or partnerships from previous versions.
+- Future plans include converting this into a full-stack project with backend integration for real-time financial recommendations.
