@@ -1,66 +1,87 @@
-# Capital One CC - Website Project
+# AI Integrated Savings
 
-A simple, multi-page informational website designed as a frontend concept for Capital One, featuring consistent branding, a shared navigation bar, and user-friendly layout. This project demonstrates proficiency in HTML, CSS, and basic frontend architecture.
+A user-friendly, multi-page informational website designed to showcase AI-driven savings strategies. This frontend concept emphasizes consistent branding, a shared navigation bar, and an intuitive layout. The project demonstrates proficiency in HTML, CSS, and basic frontend architecture.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-CAPITAL-ONE-CC/
-├── About-Us.html
-├── Capital-One-Expense-Safety.html
-├── Expense-Safety.html
+AI-Integrated-Savings/
+├── .vscode/
 ├── Images/
-│   └── Capital_One-Logo.wine.png
-├── Subscription-Safety.css
+├── styles/
+├── .gitignore
+├── About-Us.html
+├── About-Us.css
+├── Expense-Safety.html
+├── Expense-Safety.css
+├── Homepage_s.css
+├── README.md
 ├── Subscription-Safety.html
+├── Subscription-Safety.css
+├── app.py
+├── file_structure.txt
+├── frontend.js
 ├── index.html
+├── index_s.css
 ├── navbar.html
+└── requirements.txt
 ```
 
-- `index.html`: Homepage with Capital One branding and quick links.
-- `About-Us.html`: Info page about the project or company.
-- `Capital-One-Expense-Safety.html` / `Expense-Safety.html`: Educational pages about protecting financial data.
-- `Subscription-Safety.html`: Guides on managing subscriptions and spending safety.
-- `navbar.html`: Reusable navigation bar template used across all pages.
-- `Subscription-Safety.css`: Main stylesheet for layout and styling.
-- `Images/`: Contains the Capital One logo used in the navbars.
+## Features
 
-## 🧩 Features
+- **Informational Pages**: Includes pages such as About Us, Expense Safety, and Subscription Safety to provide comprehensive information on AI-driven savings strategies.
+- **Consistent Navigation**: A shared navigation bar across all pages ensures seamless user experience.
+- **Responsive Design**: The website is designed to be responsive across various devices using CSS.
 
-- ✅ Responsive HTML layout
-- ✅ Shared navigation bar component (`navbar.html`)
-- ✅ Capital One brand logo integration
-- ✅ Custom CSS styling for consistent appearance
-- ✅ Modular file structure for easy updates and scalability
+## Technologies Used
 
-## 🚀 Deployment
+- **HTML5**: For structuring the web pages.
+- **CSS3**: For styling and layout.
+- **JavaScript**: For interactive elements.
+- **Python**: Backend logic implemented with Flask (`app.py`).
+- **Visual Studio Code**: Project development environment.
 
-This project is live on GitHub Pages: [https://thespaceblade.github.io/Capital-One-CC/](https://thespaceblade.github.io/Capital-One-CC/)
+## Setup Instructions
 
-## 🚀 How to Run
+1. **Clone the Repository**:
 
-1. Clone the repository:
    ```bash
-   git clone https://github.com/Thespaceblade/Capital-One-CC.git
-   cd Capital-One-CC
+   git clone https://github.com/Thespaceblade/AI-Integrated-Savings.git
    ```
 
-2. Open any of the `.html` files in your browser (e.g., `index.html`):
+2. **Navigate to the Project Directory**:
+
    ```bash
-   open index.html
+   cd AI-Integrated-Savings
    ```
 
-> 💡 Pro Tip: Use a local server (like Live Server in VS Code) for best results with relative paths and media loading.
+3. **Set Up a Virtual Environment** (Optional but recommended):
 
-## 🛠️ Planned Improvements
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use 'venv\Scripts\activate'
+   ```
 
-- ✅ Consolidate all navbar elements and buttons into `navbar.html`
-- ✅ Use Capital One logo consistently across all pages
-- ⬜ Refactor inline styles into external CSS
-- ⬜ Improve accessibility (ARIA roles, alt text)
-- ⬜ Add SEO tags and metadata
+4. **Install Required Packages**:
 
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 🤝 License
+5. **Run the Application**:
 
-This project is open-source and intended for educational or demo purposes only. It is not affiliated with or endorsed by Capital One.
+   ```bash
+   python app.py
+   ```
+
+6. **View in Browser**:
+
+   Open `http://localhost:5000` in your web browser to explore the website.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your enhancements.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
