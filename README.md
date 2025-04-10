@@ -6,16 +6,19 @@ The goal was to build a professional, multi-page site that shares a unified bran
 
 ---
 
-## 🌐 Live Demo (Local)
+## 🌐 Live Demo
 
-This is a static site with a basic Python server to simulate full app behavior. Clone and run locally using the instructions below.
+Explore the project live on GitHub Pages:  
+🔗 [https://thespaceblade.github.io/AI-Integrated-Savings/](https://thespaceblade.github.io/AI-Integrated-Savings/)
+
+---
 
 ## 📄 Available Pages
 
-- [Home](index.html)
-- [About Us](About-Us.html)
-- [Expense Safety](Expense-Safety.html)
-- [Subscription Safety](Subscription-Safety.html)
+- [Home](https://thespaceblade.github.io/AI-Integrated-Savings/index.html)
+- [About Us](https://thespaceblade.github.io/AI-Integrated-Savings/About-Us.html)
+- [Expense Safety](https://thespaceblade.github.io/AI-Integrated-Savings/Expense-Safety.html)
+- [Subscription Safety](https://thespaceblade.github.io/AI-Integrated-Savings/Subscription-Safety.html)
 
 Each page features a consistent layout and branding system via the shared navigation bar.
 
@@ -87,6 +90,19 @@ AI-Integrated-Savings/
 
 6. **Visit in Browser**:
    Open `http://localhost:5000` to view the homepage and explore the rest of the site.
+
+---
+
+## 🐞 Known Issues & Future Improvements
+
+- [ ] **Fix page routing on GitHub Pages** — navigation bar may not work as expected due to relative paths
+- [ ] **Unify CSS files** — consolidate repeated styles into a shared stylesheet
+- [ ] **Enhance mobile responsiveness** — some layouts break on smaller screens
+- [ ] **Refactor `navbar.html`** — ensure better modular reuse and avoid duplication
+- [ ] **Add form elements** — build interactive input features (e.g., savings estimators)
+- [ ] **Add accessibility features** — improve contrast, alt tags, and ARIA roles
+- [ ] **Optimize image sizes** — compress images for faster load times
+- [ ] **Deploy Flask backend online** — transition from static demo to full-stack app
 
 ---
 
