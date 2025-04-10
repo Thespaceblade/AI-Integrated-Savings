@@ -3,20 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CapitalOne</title>
+    <title>Subscription Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="index_s.css">
-    <link rel="icon" type="image/png" href="Images/Capital_One-Logo.wine.png">
+    <link rel="icon" type="image/png" href="Images/Logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
       :root {
-        --capital-one-burgundy: #8B0000;
-        --capital-one-red: #CC0000;
+        --primary-color: #8B0000;
+        --secondary-color: #CC0000;
       }
 
       .primary-card {
-        background-color: var(--capital-one-burgundy);
+        background-color: var(--primary-color);
         color: white;
         border-radius: 15px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -99,7 +99,7 @@
       }
 
       .table thead {
-        background-color: var(--capital-one-burgundy);
+        background-color: var(--primary-color);
       }
 
       .table thead th {
@@ -160,16 +160,16 @@
 
       /* Button Styling */
       .btn-primary {
-        background-color: var(--capital-one-red);
-        border-color: var(--capital-one-red);
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
       .btn-primary:hover {
         transform: translateY(-3px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        background-color: var(--capital-one-burgundy);
-        border-color: var(--capital-one-burgundy);
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
       }
 
       .btn-light {
@@ -278,10 +278,14 @@
       fetch('navbar.html')
         .then(response => response.text())
         .then(data => {
-          document.getElementById('navbar-placeholder').innerHTML = data.replace(
-            'src="Capital_One-Logo.wine.png"',
-            'src="Capital_One-Logo.wine.png"'
-          );
+          // Add #file:image.png to the logo image in the navbar
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, 'text/html');
+          const logoElement = doc.querySelector('img[src*="Logo"]');
+          if (logoElement) {
+            logoElement.src += '#file:image.png';
+          }
+          document.getElementById('navbar-placeholder').innerHTML = doc.body.innerHTML;
         });
     </script>
 
